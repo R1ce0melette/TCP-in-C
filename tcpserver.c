@@ -34,24 +34,41 @@ int main(){
     //Accept incoming traffic
     struct sockaddr_in client_address;
     int clientsoc;
-    char *motd = "Welcome";
+    char *msgUsername = "enter username";
+    char *msgPassword = "enter password";
+    const char username[] = "placeholder";
+    const char password[] = "placeholder";
+    //char *data = "";
+    char *pass = "congratz";
     char buffer[1024] = {0};
-    printf("Server listening on port %d...\n", 6969);
+    printf("\nServer listening on port %d...\n", 6969);
     int server_address_len = sizeof(server_address);
     while (1) {
         if ((new_socket = accept(sockfd, (struct sockaddr *)&server_address, (socklen_t *)&server_address_len)) < 0) {
             perror("accept");
             exit(EXIT_FAILURE);
         }
-
         printf("New connection accepted\n");
-
-        // Send welcome message
-        send(new_socket, motd, strlen(motd), 0);
+        send(new_socket, msgUsername, strlen(msgUsername), 0);
         read(new_socket, buffer, 1024);
+        //data = buffer;
+        printf("%s", buffer);
+        printf("%d", strcmp(buffer, username));
+        while(strcmp(buffer, username) == 0){
+            send(new_socket, msgPassword, strlen(msgPassword), 0);
+            read(new_socket, buffer, 1024);
+            //data = buffer;
+            if (strcmp(buffer,password) == 0){
+                printf("%s", pass);
+                send(new_socket, pass, strlen(pass), 0);
+                break;
+            } else {
+                continue;
+            }
+            printf("%s", buffer);
+        } 
         close(new_socket);
     }
     //clean up socket
     close(sockfd);
-    return 0;
 }
