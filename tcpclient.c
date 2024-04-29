@@ -26,16 +26,23 @@ int main(){
     if((connect(clientsoc, (struct sockaddr *)&server_address, server_address_len)) <0){
         perror("Connection fail.\n");
     }
-    // Send message to server
-    const char *message = "Hello server";
-    send(clientsoc, message, strlen(message), 0);
-    printf("Message sent to server\n");
-
-    // Read response from server
+    char msg[buffer_size] = "";
     char buffer[1024] = {0};
-    read(clientsoc, buffer, 1024);
+    read(clientsoc, buffer, 1024); 
     printf("Server response: %s\n", buffer);
-
+    while (buffer != "exit"){
+        fgets(msg, buffer_size, stdin);
+        send(clientsoc, msg, strlen(msg), 0);
+        read(clientsoc, buffer, 1024); //read server response
+        printf("Server response: %s\n", buffer);
+    } 
+    // Send message to server
+    //const char *message = "Hello server";
+    //send(clientsoc, message, strlen(message), 0);
+    //printf("Message sent to server\n");
+    //read
+    //read(clientsoc, buffer, 1024); //read server response
+    //printf("Server response: %s\n", buffer);
     //close socket
     close(clientsoc);
     return 0;
